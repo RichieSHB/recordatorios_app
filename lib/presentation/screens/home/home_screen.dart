@@ -14,25 +14,21 @@ class HomeScreen extends StatelessWidget {
         title: Text('Recordatorios'),
         actions: [IconButton(icon: Icon(Icons.settings), onPressed: () {})],
       ),
-      body: FutureBuilder(
-        future: casesProvider.loadCases(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return ListView.builder(
-            itemCount: casesProvider.cases.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Icon(Icons.event),
-                title: Text(casesProvider.cases[index]['case_name']),
-                subtitle: Text(casesProvider.cases[index]['client_name']),
-                trailing: Icon(Icons.arrow_forward_ios),
-              );
-            },
-          );
-        },
-      ),
+      body:
+          casesProvider.cases.isEmpty
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                itemCount: casesProvider.cases.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Icon(Icons.event),
+                    title: Text(casesProvider.cases[index]['case_name']),
+                    subtitle: Text(casesProvider.cases[index]['client_name']),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    onTap: () {},
+                  );
+                },
+              ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await casesProvider.addCase(
