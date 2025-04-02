@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:recordatorios_app/presentation/providers/cases_provider.dart';
+import 'package:recordatorios_app/presentation/screens/home/home_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -7,11 +10,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Material App Bar')),
-        body: const Center(child: Text('Hello World')),
+    return ChangeNotifierProvider(
+      create: (_) => CasesProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Material App',
+        theme: ThemeData(
+          colorSchemeSeed: Colors.amber,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: HomeScreen(),
       ),
     );
   }
