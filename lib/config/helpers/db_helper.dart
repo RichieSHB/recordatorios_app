@@ -44,4 +44,9 @@ class DbHelper {
     final db = await _initDatabasePath();
     return await db.query('cases');
   }
+
+  static Future<void> deleteCase(int id) async {
+    final db = await DbHelper._initDatabasePath();
+    await db.delete('cases', where: 'id = ?', whereArgs: [id]);
+  }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recordatorios_app/presentation/providers/cases_provider.dart';
+import 'package:recordatorios_app/presentation/screens/addCases/add_cases_screen.dart';
+import 'package:recordatorios_app/presentation/widgets/home/list_view_recordatorios.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,30 +18,19 @@ class HomeScreen extends StatelessWidget {
       ),
       body:
           casesProvider.cases.isEmpty
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                itemCount: casesProvider.cases.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Icon(Icons.event),
-                    title: Text(casesProvider.cases[index]['case_name']),
-                    subtitle: Text(casesProvider.cases[index]['client_name']),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {},
-                  );
-                },
-              ),
+              ? Center(
+                child: Text(
+                  "No hay casos disponibles",
+                  style: TextStyle(fontSize: 32),
+                ),
+              )
+              : ListViewRecordatorios(casesProvider: casesProvider),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await casesProvider.addCase(
-            'Caso Ejemplo',
-            'Cliente Ejemplo',
-            'Asunto Ejemplo',
-            'Descripcion Evento',
-            '2025-04-02',
-            '14:00',
-            '2025-04-01',
-            '12:00',
+        //backgroundColor: Colors.amber,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddCasesScreen()),
           );
         },
         // backgroundColor: Colors.blue,

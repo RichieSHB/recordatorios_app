@@ -3,11 +3,20 @@ import 'package:recordatorios_app/config/helpers/db_helper.dart';
 
 class CasesProvider with ChangeNotifier {
   List<Map<String, dynamic>> _cases = [];
+  DateTime? eventDate;
+  TimeOfDay? eventTime;
+  DateTime? reminderDate;
+  TimeOfDay? reminderTime;
+
   List<Map<String, dynamic>> get cases => _cases;
 
   Future<void> loadCases() async {
-    final cases = await DbHelper.getCases();
-    _cases = cases;
+    try {
+      final cases = await DbHelper.getCases();
+      _cases = cases;
+    } catch (e) {
+      _cases = [];
+    }
     notifyListeners();
   }
 
@@ -32,5 +41,28 @@ class CasesProvider with ChangeNotifier {
       reminderTime,
     );
     await loadCases();
+  }
+
+  Future<void> deleteCase(int id) async {
+    await DbHelper.deleteCase(id);
+    await loadCases();
+  }
+
+  void selectDate(DateTime picked, bool isEvent) {
+    if (isEvent) {
+      eventDate = picked;
+    } else {
+      reminderDate = picked;
+    }
+    notifyListeners();
+  }
+
+  void selectTime(TimeOfDay picked, bool isEvent) {
+    if (isEvent) {
+      eventTime = picked;
+    } else {
+      reminderTime = picked;
+    }
+    notifyListeners();
   }
 }
