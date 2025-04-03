@@ -65,4 +65,12 @@ class CasesProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearDates() {
+    eventDate = null;
+    eventTime = null;
+    reminderDate = null;
+    reminderTime = null;
+    notifyListeners();
+  }
 }

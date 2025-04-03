@@ -31,7 +31,9 @@ class HomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddCasesScreen()),
-          );
+          ).then((_) {
+            casesProvider.clearDates();
+          });
         },
         // backgroundColor: Colors.blue,
         child: Icon(Icons.add),
