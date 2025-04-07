@@ -7,6 +7,9 @@ class CasesProvider with ChangeNotifier {
   TimeOfDay? eventTime;
   DateTime? reminderDate;
   TimeOfDay? reminderTime;
+  bool formSubmitted = false;
+  DateTime _selectedDate = DateTime.now();
+  DateTime get selectedDate => _selectedDate;
 
   List<Map<String, dynamic>> get cases => _cases;
 
@@ -20,27 +23,41 @@ class CasesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addCase(
+  Future<String?> addCase(
     String caseName,
     String clientName,
     String subject,
     String description,
-    String eventDate,
-    String eventTime,
-    String reminderDate,
-    String reminderTime,
+    DateTime? eventDate,
+    TimeOfDay? eventTime,
+    DateTime? reminderDate,
+    TimeOfDay? reminderTime,
   ) async {
+    if (caseName.isEmpty ||
+        clientName.isEmpty ||
+        subject.isEmpty ||
+        description.isEmpty) {
+      return "Todos los campos son obligatorios";
+    }
+
+    if (reminderDate!.isAfter(eventDate!) ||
+        reminderDate.isAtSameMomentAs(eventDate) &&
+            reminderTime!.hour > eventTime!.hour) {
+      return "El recordatorio no puede ser posterior al evento";
+    }
+
     await DbHelper.insertCase(
       caseName,
       clientName,
       subject,
       description,
-      eventDate,
-      eventTime,
-      reminderDate,
-      reminderTime,
+      eventDate.toString().split(' ')[0],
+      eventTime.toString().split(' ')[0],
+      reminderDate.toString().split(' ')[0],
+      reminderTime.toString().split(' ')[0],
     );
     await loadCases();
+    return null;
   }
 
   Future<void> deleteCase(int id) async {
@@ -71,6 +88,23 @@ class CasesProvider with ChangeNotifier {
     eventTime = null;
     reminderDate = null;
     reminderTime = null;
+    setFormSubmitted(false);
     notifyListeners();
+  }
+
+  void setFormSubmitted(bool value) {
+    formSubmitted = value;
+    notifyListeners();
+  }
+
+  void setSelectedDate(DateTime date) {
+    _selectedDate = date;
+    notifyListeners();
+  }
+
+  List<Map<String, dynamic>> getEventsForDay(DateTime day) {
+    return _cases.where((c) {
+      return DateUtils.isSameDay(DateTime.parse(c['event_date']), day);
+    }).toList();
   }
 }
