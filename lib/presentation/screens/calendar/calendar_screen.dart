@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recordatorios_app/presentation/providers/cases_provider.dart';
+import 'package:recordatorios_app/presentation/providers/theme_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarScreen extends StatelessWidget {
@@ -9,6 +10,7 @@ class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final casesProvider = Provider.of<CasesProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text("Calendario de Casos")),
@@ -32,11 +34,11 @@ class CalendarScreen extends StatelessWidget {
             },
             calendarStyle: CalendarStyle(
               markerDecoration: BoxDecoration(
-                color: Colors.blue,
+                color: themeProvider.complementaryColor,
                 shape: BoxShape.circle,
               ),
               selectedDecoration: BoxDecoration(
-                color: Colors.deepPurple,
+                color: themeProvider.primaryColor,
                 shape: BoxShape.circle,
               ),
             ),

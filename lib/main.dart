@@ -21,9 +21,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Material App',
-
             theme: ThemeData(
-              colorSchemeSeed: Colors.purple,
+              colorSchemeSeed: themeProvider.primaryColor,
               brightness: themeProvider.brightness,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),

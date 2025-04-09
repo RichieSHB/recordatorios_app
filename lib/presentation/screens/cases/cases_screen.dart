@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recordatorios_app/presentation/providers/cases_provider.dart';
-import 'package:recordatorios_app/presentation/providers/theme_provider.dart';
 import 'package:recordatorios_app/presentation/screens/addCases/add_cases_screen.dart';
+import 'package:recordatorios_app/presentation/screens/settings/settings_screen.dart';
 import 'package:recordatorios_app/presentation/widgets/home/list_view_recordatorios.dart';
 
 class CasesScreen extends StatelessWidget {
@@ -17,9 +17,12 @@ class CasesScreen extends StatelessWidget {
         title: Text('Recordatorios'),
         actions: [
           IconButton(
-            icon: Icon(Icons.brightness_6),
+            icon: Icon(Icons.tune),
             onPressed: () {
-              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsScreen()),
+              );
             },
           ),
         ],
