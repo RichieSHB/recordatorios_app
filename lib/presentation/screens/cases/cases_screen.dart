@@ -4,6 +4,7 @@ import 'package:recordatorios_app/presentation/providers/cases_provider.dart';
 import 'package:recordatorios_app/presentation/screens/addCases/add_cases_screen.dart';
 import 'package:recordatorios_app/presentation/screens/settings/settings_screen.dart';
 import 'package:recordatorios_app/presentation/widgets/home/list_view_recordatorios.dart';
+import 'package:recordatorios_app/services/notification_service.dart';
 
 class CasesScreen extends StatelessWidget {
   const CasesScreen({super.key});
