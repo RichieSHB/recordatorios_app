@@ -9,8 +9,8 @@ class CasesProvider with ChangeNotifier {
   TimeOfDay? reminderTime;
   bool formSubmitted = false;
   DateTime _selectedDate = DateTime.now();
-  DateTime get selectedDate => _selectedDate;
 
+  DateTime get selectedDate => _selectedDate;
   List<Map<String, dynamic>> get cases => _cases;
 
   Future<void> loadCases() async {
@@ -23,7 +23,7 @@ class CasesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> addCase(
+  Future<void> addCase(
     String caseName,
     String clientName,
     String subject,
@@ -33,19 +33,6 @@ class CasesProvider with ChangeNotifier {
     DateTime? reminderDate,
     TimeOfDay? reminderTime,
   ) async {
-    if (caseName.isEmpty ||
-        clientName.isEmpty ||
-        subject.isEmpty ||
-        description.isEmpty) {
-      return "Todos los campos son obligatorios";
-    }
-
-    if (reminderDate!.isAfter(eventDate!) ||
-        reminderDate.isAtSameMomentAs(eventDate) &&
-            reminderTime!.hour > eventTime!.hour) {
-      return "El recordatorio no puede ser posterior al evento";
-    }
-
     await DbHelper.insertCase(
       caseName,
       clientName,
@@ -57,7 +44,6 @@ class CasesProvider with ChangeNotifier {
       reminderTime.toString().split(' ')[0],
     );
     await loadCases();
-    return null;
   }
 
   Future<void> deleteCase(int id) async {

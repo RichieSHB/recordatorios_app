@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recordatorios_app/presentation/providers/cases_provider.dart';
+import 'package:recordatorios_app/services/notification_service.dart';
 
 class AddCasesScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -83,20 +84,21 @@ class AddCasesScreen extends StatelessWidget {
                 onPressed: () async {
                   casesProvider.setFormSubmitted(true);
                   if (_formKey.currentState!.validate()) {
-                    if (casesProvider.eventDate == null ||
-                        casesProvider.reminderDate == null ||
-                        casesProvider.eventTime == null ||
-                        casesProvider.reminderTime == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Por favor seleccione todas las fechas",
-                          ),
-                        ),
-                      );
-                      return;
-                    }
-                    String? errorMessage = await casesProvider.addCase(
+                    final DateTime scheduledDate = DateTime(
+                      casesProvider.reminderDate!.year,
+                      casesProvider.reminderDate!.month,
+                      casesProvider.reminderDate!.day,
+                      casesProvider.reminderTime!.hour,
+                      casesProvider.reminderTime!.minute,
+                    );
+                    NotificationService.scheduleNotification(
+                      title: caseNameController.text,
+                      body:
+                          '${subjectController.text} ${descriptionController.text}',
+                      scheduledDate: scheduledDate,
+                    );
+
+                    await casesProvider.addCase(
                       caseNameController.text,
                       clientNameController.text,
                       subjectController.text,
@@ -107,13 +109,7 @@ class AddCasesScreen extends StatelessWidget {
                       casesProvider.reminderTime,
                     );
                     if (context.mounted) {
-                      if (errorMessage != null) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(errorMessage)));
-                      } else {
-                        Navigator.pop(context);
-                      }
+                      Navigator.pop(context);
                     }
                   }
                 },
